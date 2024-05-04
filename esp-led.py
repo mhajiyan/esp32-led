@@ -16,14 +16,17 @@ def calculate_intensity(intensity_value):
 
 
 def red_color(r_value):
+    """Set the red color of the RGB led- between 0 to 255"""
     PWM(0, freq=50, duty_u16=abs((r_value*257)-65535))
 
 
 def green_color(g_value):
+    """Set the green color of the RGB led- between 0 to 255"""
     PWM(1, freq=50, duty_u16=abs((g_value*257)-65535))
 
 
 def blue_color(b_value):
+    """Set the blue color of the RGB led- between 0 to 255"""
     PWM(2, freq=50, duty_u16=abs((b_value*257)-65535))
 
 
@@ -117,11 +120,10 @@ def long_dis():
 
 my_sensor = HCSR04(trigger_pin=3, echo_pin=4)
 
+distance = 199
 while True:
     distance = my_sensor.distance_cm()
-    if distance >= 20:
-        long_dis()
-    elif 8 < distance < 20:
-        mid_dis()
-    elif distance <= 8:
-        short_dis()
+    intensity = round(255 - distance * (255 / 50))
+    intensity = min(255, max(0, intensity))
+    blue_color(intensity)
+    print(my_sensor.distance_cm())
